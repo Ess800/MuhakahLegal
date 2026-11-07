@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Meta Authorization Callback — Muhakah Publisher</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main>
+  <p class="eyebrow">مُحاكاة | Muhakah</p>
+  <h1>Meta authorization received</h1>
+  <p class="lead">Copy the callback data below and paste it into the waiting publishing tool.</p>
+  <p id="status">Reading authorization response…</p>
+  <button id="copy" style="margin:18px 0;padding:15px 22px;border:1px solid #00f0ff;border-radius:10px;background:#0b0f19;color:#00f0ff;font-size:17px;font-weight:700;cursor:pointer">Copy callback data</button>
+  <p class="meta">The authorization code is not displayed on this page. Do not share it publicly.</p>
+</main>
+<script>
+  const original = window.location.href;
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get("code");
+  const error = params.get("error");
+  const status = document.getElementById("status");
+  const button = document.getElementById("copy");
+  if (error) {
+    status.textContent = "Meta returned an error: " + error;
+    button.disabled = true;
+  } else if (code) {
+    status.textContent = "Authorization code received. Click Copy callback data.";
+    history.replaceState({}, document.title, window.location.pathname);
+    button.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(original);
+        status.textContent = "Copied. Paste it into the waiting tool.";
+      } catch (e) {
+        status.textContent = "Clipboard blocked. Use the browser address-bar history instead.";
+      }
+    });
+  } else {
+    status.textContent = "No authorization code found in this URL.";
+    button.disabled = true;
+  }
+</script>
+</body>
+</html>
