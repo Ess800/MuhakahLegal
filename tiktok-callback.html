@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>TikTok Authorization Callback — Muhakah Publisher</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main>
+  <p class="eyebrow">مُحاكاة | Muhakah</p>
+  <h1>TikTok authorization received</h1>
+  <p class="lead">Copy the full URL below and send it to the Muhakah operator. Do not share it publicly.</p>
+  <p id="status">Reading authorization response…</p>
+  <textarea id="callback-url" readonly style="width:100%;height:160px;background:#0b0f19;color:#e2e8f0;border:1px solid #1e2333;border-radius:10px;padding:12px;font-family:monospace"></textarea>
+  <p class="meta">This page is only a callback receiver. It does not store the authorization code.</p>
+</main>
+<script>
+  const url = window.location.href;
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get("code");
+  const error = params.get("error");
+  const status = document.getElementById("status");
+  const box = document.getElementById("callback-url");
+  box.value = url;
+  if (error) {
+    status.textContent = "TikTok returned an error: " + error;
+  } else if (code) {
+    status.textContent = "Authorization code received. Copy the full URL above.";
+  } else {
+    status.textContent = "No authorization code found in this URL.";
+  }
+</script>
+</body>
+</html>
